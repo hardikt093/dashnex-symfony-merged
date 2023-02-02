@@ -4,7 +4,7 @@ Create a fork of this project, make changes and create a Pull Request to the ini
 
 ## Your tasks:
 1. Backend:
- - implement cart logic (view, add, remove)
+ - implement cart logic (view, add, remove products)
  - fix bugs if any
 
 ## Extra tasks for Full-stack developers
