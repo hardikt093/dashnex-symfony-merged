@@ -1,0 +1,7 @@
+App\Entity\Cart:
+    cart_1:
+        product: '@product_1'
+        quantity: <numberBetween(1, 10)>
+    cart_2:
+        product: '@product_2'
+        quantity: <numberBetween(1, 10)>
