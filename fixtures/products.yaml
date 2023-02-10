@@ -1,0 +1,6 @@
+App\Entity\Product:
+    product_{1..3}:
+        title: <name()>
+        image: '/images/mouse3.webp'
+        price: 100
+        description: <text()>

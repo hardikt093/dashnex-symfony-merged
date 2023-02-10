@@ -2,39 +2,72 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Controller\ProductController;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 
-#[ORM\Entity()]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection(),
-    ]
-)]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+
+#[ApiResource(operations: [
+    new GetCollection(
+        routeName:'api_app_product'
+    ),
+    new Get(
+        name: 'product/{id}',
+        routeName:'api_show_product'
+    ),
+    new Post(
+        name: 'product',
+        routeName:'api_new_product',
+        controller: ProductController::class
+    ),
+    new Put(
+        name: 'product',
+        routeName:'api_edit_product',
+    ),
+    new Delete(
+        name: 'product',
+        routeName:'api_delete_product',
+    )
+])]
+
 class Product
 {
-    public function __construct(
-        #[ORM\Id]
-        #[ORM\GeneratedValue]
-        #[ORM\Column]
-        private ?int $id = null,
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-        #[ORM\Column(length: 255)]
-        private ?string $title = null,
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
 
-        #[ORM\Column(length: 255, nullable: true)]
-        private ?string $image = null,
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
 
-        #[ORM\Column]
-        private ?float $price = null,
+    #[ORM\Column]
+    private ?float $price = null;
 
-        #[ORM\Column(length: 1000)]
-        private ?string $description = null,
-    ) {}
+    #[ORM\Column(length: 65535, nullable: true, type: 'text')]
+    private ?string $description = null;
+
+    #[ORM\Column(type:'datetime', options:['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTime $created_at = null;
+
+    #[ORM\Column(type:'datetime', options:['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTime $updated_at = null;
+
+    public function __construct()
+    {
+        $date = new \DateTime('@'.strtotime('now'));
+        $this->created_at =  $date;
+        $this->updated_at =  $date;
+    }
 
     public function getId(): ?int
     {
@@ -79,12 +112,36 @@ class Product
 
     public function getDescription(): ?string
     {
-        return $this->title;
+        return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTime $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
